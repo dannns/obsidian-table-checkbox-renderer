@@ -1,8 +1,8 @@
 {
     "id": "table-checkbox-renderer",
     "name": "Table Checkbox Renderer Plugin",
-    "version": "0.9.4",
-    "description": "Enables interactive checkboxes within Markdown tables without modifying the source HTML.",
+    "version": "0.9.5",
+    "description": "Interactive checkboxes for Markdown tables. Toggle checkboxes in Reading Mode to instantly update the Markdown file. Supports multiple checkboxes per cell and any table layout.",
     "author": "Daniel Aguerrevere",
     "authorUrl": "https://github.com/dannns/obsidian-table-checkbox-renderer",
     "minAppVersion": "1.8.0",
