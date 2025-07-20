@@ -1,0 +1,12 @@
+# Node and TypeScript
+node_modules/
+build/
+
+# Obsidian plugin output
+*.zip
+*.obsidian.json
+
+# Editor/OS
+.vscode/
+.DS_Store
+Thumbs.db

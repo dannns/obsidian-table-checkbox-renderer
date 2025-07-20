@@ -1,0 +1,16 @@
+{
+  "name": "table-checkbox-renderer",
+  "version": "0.0.1",
+  "description": "Obsidian plugin for interactive checkboxes in Markdown tables. Supports multiple checkboxes per cell and robust mapping between rendered checkboxes and source Markdown.",
+  "main": "main.js",
+  "scripts": {
+    "build": "tsc && cp manifest.json table-checkbox-renderer/"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "obsidian": "*"
+  }
+}
