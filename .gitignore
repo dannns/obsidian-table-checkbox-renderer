@@ -1,6 +1,8 @@
 # Node and TypeScript
 node_modules/
-build/
+
+# Build output
+main.js
 
 # Obsidian plugin output
 *.zip
