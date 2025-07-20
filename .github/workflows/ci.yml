@@ -42,5 +42,3 @@ jobs:
           files: |
             main.js
             manifest.json
-            README.md
-            LICENSE
