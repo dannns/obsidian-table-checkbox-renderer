@@ -27,6 +27,7 @@ jobs:
           test -f build/main.js
           test -f build/manifest.json
           test -f build/README.md
+          test -f build/LICENSE
 
   release:
     if: github.event_name == 'release'
@@ -35,10 +36,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Copy build artifacts to root
+        run: |
+          cp build/main.js .
+          cp build/manifest.json .
+          cp build/README.md .
+          cp build/LICENSE .
       - name: Upload release assets
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            build/main.js
-            build/manifest.json
-            build/README.md
+            main.js
+            manifest.json
+            README.md
+            LICENSE
