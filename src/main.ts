@@ -3,6 +3,7 @@ import { Plugin, MarkdownView, MarkdownPostProcessorContext } from 'obsidian';
 // Table Checkbox Renderer: Interactive checkboxes in Markdown tables
 export default class TableCheckboxRendererPlugin extends Plugin {
     async onload() {
+        console.log('Loading TableCheckboxRendererPlugin');
         this.registerMarkdownPostProcessor(async (element: HTMLElement, context: MarkdownPostProcessorContext) => {
             const tables = element.querySelectorAll('table');
             tables.forEach(table => {
@@ -22,6 +23,7 @@ export default class TableCheckboxRendererPlugin extends Plugin {
     }
 
     async onunload() {
+        console.log('Unloading TableCheckboxRendererPlugin');
         // No explicit cleanup needed; Obsidian handles post-processor unregistering.
     }
 }

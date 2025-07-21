@@ -1,10 +1,12 @@
 {
   "name": "table-checkbox-renderer",
-  "version": "0.9.8",
+  "version": "0.9.9",
   "description": "Renders interactive checkboxes in Markdown tables while in Reading View updating the Markdown when their state is toggled.",
   "main": "main.js",
+  "types": "main.d.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "tsc --watch"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
