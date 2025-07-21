@@ -68,14 +68,14 @@ function renderCellCheckboxes(cell, cellIdx, cellCheckboxCounts, sourceLine, lin
     for (let i = 0; i < cellIdx; i++)
         baseIdx += cellCheckboxCounts[i];
     let lastIndex = 0;
-    cell.innerHTML = '';
+    while (cell.firstChild)
+        cell.removeChild(cell.firstChild);
     matches.forEach((match, idx) => {
         if (match.index > lastIndex) {
-            cell.appendChild(document.createTextNode(cellText.slice(lastIndex, match.index)));
+            cell.createEl('span', { text: cellText.slice(lastIndex, match.index) });
         }
         lastIndex = match.index + match[0].length;
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
+        const checkbox = cell.createEl('input', { type: 'checkbox' });
         checkbox.className = 'task-list-item-checkbox';
         checkbox.checked = match[0] === '[x]';
         const globalIdx = baseIdx + idx;
@@ -99,9 +99,8 @@ function renderCellCheckboxes(cell, cellIdx, cellCheckboxCounts, sourceLine, lin
             await plugin.app.vault.modify(file, lines.join('\n'));
             checkbox.checked = newState === '[x]';
         });
-        cell.appendChild(checkbox);
     });
     if (lastIndex < cellText.length) {
-        cell.appendChild(document.createTextNode(cellText.slice(lastIndex)));
+        cell.createEl('span', { text: cellText.slice(lastIndex) });
     }
 }
