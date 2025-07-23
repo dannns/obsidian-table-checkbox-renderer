@@ -8,11 +8,11 @@ Enables interactive checkboxes inside Markdown tables. When you click a checkbox
 ![Demo](demo.gif)
 
 ## Features
-- Interactive checkboxes in Markdown tables (Reading Mode)
-- Supports multiple checkboxes per cell and per row
-- Changes are immediately saved to the Markdown file
-- Robust mapping between rendered checkboxes and source Markdown
-- Works with any table structure, including complex layouts
+- Interactive checkboxes in Markdown tables (Reading Mode).
+- Supports multiple checkboxes per cell and per row.
+- Changes are immediately saved to the Markdown file.
+- Robust mapping between rendered checkboxes and source Markdown.
+- Works with any table structure, including complex layouts.
 
 ## Usage
 - Install the plugin in Obsidian.
