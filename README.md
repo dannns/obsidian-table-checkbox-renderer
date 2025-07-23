@@ -1,9 +1,11 @@
 # Obsidian Table Checkbox Renderer
 
 ## Overview
-This Obsidian plugin enables interactive checkboxes inside Markdown tables. When you click a checkbox in Reading Mode, the plugin updates the underlying Markdown source, keeping your table and file in sync. It supports multiple checkboxes per cell and works robustly for any table layout.
+Enables interactive checkboxes inside Markdown tables. When you click a checkbox in Reading Mode, the plugin updates the underlying Markdown source, keeping your table and file in sync. It supports multiple checkboxes per cell and works robustly for any table layout.
 
-![Demo of plugin in action](demo.gif)
+## Demo
+
+![Demo](demo.gif)
 
 ## Features
 - Interactive checkboxes in Markdown tables (Reading Mode)
@@ -24,24 +26,9 @@ This Obsidian plugin enables interactive checkboxes inside Markdown tables. When
 - When a checkbox is toggled, the plugin updates the correct `[ ]` or `[x]` in the Markdown file.
 - In Edit Mode, a CodeMirror extension decorates checkboxes and allows toggling directly in the editor.
 
-## Build Instructions
-
-### Prerequisites
-- Node.js and npm installed
-
-### Install dependencies
-```bash
-npm install
-```
-
-### Build the plugin
-```bash
-npm run build
-```
-This will compile the TypeScript code and copy the manifest to the output directory.
-
 ### Development
 - Edit the TypeScript source files in the project directory.
+- Install npm `npm install`.
 - Run `npm run build` after making changes to produce the updated plugin files.
 - Load the plugin in Obsidian's community plugins folder for testing.
 
