@@ -3,6 +3,8 @@
 ## Overview
 This Obsidian plugin enables interactive checkboxes inside Markdown tables. When you click a checkbox in Reading Mode, the plugin updates the underlying Markdown source, keeping your table and file in sync. It supports multiple checkboxes per cell and works robustly for any table layout.
 
+![Demo of plugin in action](demo.gif)
+
 ## Features
 - Interactive checkboxes in Markdown tables (Reading Mode)
 - Supports multiple checkboxes per cell and per row

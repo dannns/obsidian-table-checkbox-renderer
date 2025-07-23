@@ -1,10 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const obsidian_1 = require("obsidian");
-// Table Checkbox Renderer: Interactive checkboxes in Markdown tables
 class TableCheckboxRendererPlugin extends obsidian_1.Plugin {
     async onload() {
-        console.log('Loading TableCheckboxRendererPlugin');
         this.registerMarkdownPostProcessor(async (element, context) => {
             const tables = element.querySelectorAll('table');
             tables.forEach(table => {
@@ -26,8 +24,6 @@ class TableCheckboxRendererPlugin extends obsidian_1.Plugin {
         });
     }
     async onunload() {
-        console.log('Unloading TableCheckboxRendererPlugin');
-        // No explicit cleanup needed; Obsidian handles post-processor unregistering.
     }
 }
 exports.default = TableCheckboxRendererPlugin;
@@ -56,7 +52,6 @@ async function getSourceLine(plugin, file, lineNumber) {
     }
 }
 function getCheckboxCountsPerCell(sourceLine) {
-    // Split by | and trim, do not filter out empty cells
     return sourceLine.split('|').map((s) => [...s.trim().matchAll(/\[( |x)\]/g)].length);
 }
 function renderCellCheckboxes(cell, cellIdx, cellCheckboxCounts, sourceLine, lineNumber, file, plugin, globalCheckboxIdx) {
@@ -83,7 +78,6 @@ function renderCellCheckboxes(cell, cellIdx, cellCheckboxCounts, sourceLine, lin
             if (lineNumber >= lines.length)
                 return;
             const lineContent = lines[lineNumber];
-            // Find all checkboxes in the source line
             const sourceMatches = [...lineContent.matchAll(checkboxPattern)];
             const matchIndex = sourceMatches[thisCheckboxIdx]?.index ?? -1;
             if (matchIndex === -1)
