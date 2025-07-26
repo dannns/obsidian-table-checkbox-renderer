@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { renderCellCheckboxesPure } from '../src/render-cell-checkboxes';
-import { createSpanElement, createCheckboxElement, handleCheckboxChange } from '../src/dom-helpers';
+import { createCheckboxElement, createSpanElement, handleCheckboxChange } from '../src/dom-helpers';
 
 describe('integration: renderCellCheckboxes and handleCheckboxChange', () => {
   it('updates the correct checkbox in markdown when toggled', async () => {

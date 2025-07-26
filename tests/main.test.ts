@@ -1,9 +1,10 @@
-import { describe, it, expect } from 'vitest';
-import { getCheckboxCountsPerCell, getSourceLineNumber, getSourceLineFromContent } from '../src/markdown-helpers';
-import TableCheckboxRendererPlugin, { renderCellCheckboxes } from '../src/main';
-import { vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { JSDOM } from 'jsdom';
+
 import * as domHelpers from '../src/dom-helpers';
+import { getCheckboxCountsPerCell, getSourceLineNumber, getSourceLineFromContent } from '../src/markdown-helpers';
+import TableCheckboxRendererPlugin from '../src/main';
+import { renderCellCheckboxes } from '../src/render-cell-checkboxes';
 
 // Mock DOM helpers
 const createElMock = vi.fn((tag, opts) => {
@@ -80,7 +81,16 @@ describe('renderCellCheckboxes', () => {
   it('renders spans and checkboxes in a table cell', () => {
     const cell = document.createElement('td');
     cell.textContent = 'foo [ ] bar [x]';
-    renderCellCheckboxes(cell, 0, [2], 'foo [ ] bar [x]', 0, {}, {}, 0);
+    renderCellCheckboxes({
+      cell,
+      cellIdx: 0,
+      counts: [2],
+      srcLine: 'foo [ ] bar [x]',
+      lineNum: 0,
+      file: {},
+      plugin: {} as any,
+      idx: 0
+    });
     expect(cell.querySelectorAll('span, input[type="checkbox"]').length).toBeGreaterThan(0);
   });
 
@@ -88,7 +98,16 @@ describe('renderCellCheckboxes', () => {
     const cell = document.createElement('td');
     cell.textContent = '[ ] foo';
     const handleCheckboxChange = vi.spyOn(domHelpers, 'handleCheckboxChange').mockImplementation(() => {});
-    renderCellCheckboxes(cell, 0, [1], '[ ] foo', 0, {}, {}, 0);
+    renderCellCheckboxes({
+      cell,
+      cellIdx: 0,
+      counts: [1],
+      srcLine: '[ ] foo',
+      lineNum: 0,
+      file: {},
+      plugin: {} as any,
+      idx: 0
+    });
     const checkbox = cell.querySelector('input[type="checkbox"]');
     expect(checkbox).toBeTruthy();
     checkbox.dispatchEvent(new window.Event('change'));

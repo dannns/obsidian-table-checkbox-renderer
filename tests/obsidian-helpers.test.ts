@@ -1,6 +1,7 @@
-import { describe, it, expect, vi } from 'vitest';
-vi.mock('obsidian');
+import { describe, expect, it, vi } from 'vitest';
 import { getActiveFile, getSourceLine } from '../src/obsidian-helpers';
+
+vi.mock('obsidian');
 
 describe('getActiveFile', () => {
   it('returns file from active MarkdownView', () => {

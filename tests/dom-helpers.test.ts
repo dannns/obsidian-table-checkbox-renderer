@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { createSpanElement, createCheckboxElement } from '../src/dom-helpers';
 
 describe('createSpanElement', () => {

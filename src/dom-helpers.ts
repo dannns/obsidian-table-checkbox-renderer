@@ -1,8 +1,21 @@
-export function createSpanElement(cell: HTMLElement, text: string) {
+/**
+ * Creates a <span> element with the given text and appends it to the cell.
+ * @param cell - The table cell element
+ * @param text - The text to display inside the span
+ * @returns void
+ */
+export function createSpanElement(cell: HTMLElement, text: string): void {
   cell.createEl('span', { text });
 }
 
-export function createCheckboxElement(cell: HTMLElement, checked: boolean, onChange: () => void) {
+/**
+ * Creates a checkbox input element, sets its state, and appends it to the cell.
+ * @param cell - The table cell element
+ * @param checked - Whether the checkbox is checked
+ * @param onChange - Callback for change event
+ * @returns The created checkbox element
+ */
+export function createCheckboxElement(cell: HTMLElement, checked: boolean, onChange: () => void): HTMLInputElement {
   const box = cell.createEl('input', { type: 'checkbox' }) as HTMLInputElement;
   box.className = 'task-list-item-checkbox';
   box.checked = checked;
@@ -10,7 +23,12 @@ export function createCheckboxElement(cell: HTMLElement, checked: boolean, onCha
   return box;
 }
 
-export async function handleCheckboxChange({ box, plugin, file, lineNum, idx }: { box: HTMLInputElement, plugin: any, file: any, lineNum: number, idx: number }) {
+/**
+ * Handles checkbox state changes and updates the corresponding markdown line.
+ * @param params - Object containing box, plugin, file, lineNum, and idx
+ * @returns Promise<void>
+ */
+export async function handleCheckboxChange({ box, plugin, file, lineNum, idx }: { box: HTMLInputElement, plugin: any, file: any, lineNum: number, idx: number }): Promise<void> {
   const content = await plugin.app.vault.read(file);
   const lines = content.split(/\r?\n/);
   if (lineNum >= lines.length) return;
