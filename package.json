@@ -1,16 +1,20 @@
 {
   "name": "table-checkbox-renderer",
-  "version": "0.9.12",
+  "version": "0.9.13",
   "description": "Renders interactive checkboxes in Markdown tables while in Reading View updating the Markdown when their state is toggled.",
   "main": "main.js",
   "types": "main.d.ts",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch"
+    "build": "esbuild src/main.ts --bundle --platform=node --external:obsidian --outfile=main.js",
+    "dev": "tsc --watch",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "typescript": "^5.8.3"
+    "@vitest/coverage-v8": "^3.2.4",
+    "esbuild": "^0.25.8",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
   },
   "dependencies": {
     "obsidian": "*"

@@ -1,4 +1,7 @@
-name: Build and Release Obsidian Plugin
+# GitHub Actions workflow for collecting and uploading test coverage
+# Adds a step to generate and upload coverage reports using actions/upload-artifact
+
+name: Build, Test, and Release Obsidian Plugin
 
 on:
   push:
