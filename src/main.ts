@@ -27,7 +27,7 @@ export default class TableCheckboxRendererPlugin extends Plugin {
   }
 }
 
-function renderCellCheckboxes(cell: any, cellIdx: any, counts: any, srcLine: any, lineNum: any, file: any, plugin: any, idx: number) {
+export function renderCellCheckboxes(cell: any, cellIdx: any, counts: any, srcLine: any, lineNum: any, file: any, plugin: any, idx: number) {
   const text = cell.textContent || '';
   const actions = renderCellCheckboxesPure(text);
   while (cell.firstChild) cell.removeChild(cell.firstChild);
