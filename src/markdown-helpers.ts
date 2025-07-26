@@ -1,5 +1,3 @@
-// Checkbox and table helpers
-
 export function getCheckboxCountsPerCell(line: string): number[] {
   const cells = line.split('|');
   if (cells.length > 1 && !cells[0].trim()) cells.shift();

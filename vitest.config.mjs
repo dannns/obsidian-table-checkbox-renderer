@@ -8,7 +8,7 @@ const __dirname = dirname(__filename);
 export default defineConfig({
   test: {
     coverage: {
-      exclude: ['__mocks__/**', 'vitest.config.*']
+      exclude: ['__mocks__/**', 'vitest.config.*', 'main.js']
     }
   },
   resolve: {
