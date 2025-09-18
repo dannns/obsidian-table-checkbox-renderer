@@ -4,6 +4,7 @@ dist/
 build/
 *.tsbuildinfo
 coverage/
+main.js
 
 # Obsidian plugin output
 *.zip
