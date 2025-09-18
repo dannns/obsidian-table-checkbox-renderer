@@ -11,8 +11,7 @@ describe('integration: renderCellCheckboxes and handleCheckboxChange', () => {
     const plugin = {
       app: {
         vault: {
-          read: vi.fn(async () => content),
-          modify: vi.fn(async (_file, newContent) => { content = newContent; })
+          process: vi.fn(async (_file, fn: (data: string) => string) => { content = fn(content); })
         }
       }
     };
@@ -31,7 +30,7 @@ describe('integration: renderCellCheckboxes and handleCheckboxChange', () => {
         if (action.type === 'span') {
           createSpanElement(cell as any, action.text!);
         } else if (action.type === 'checkbox') {
-          const box = { checked: action.checked };
+          const box: any = { checked: action.checked };
           boxes.push(box);
           const globalIdx = idx + localIdx;
           box.checked = !box.checked;

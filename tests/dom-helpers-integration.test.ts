@@ -1,46 +1,52 @@
 import { describe, expect, it, vi } from 'vitest';
 import { handleCheckboxChange } from '../src/dom-helpers';
 
-describe('handleCheckboxChange', () => {
-  it('modifies the correct line and sets checkbox state (checked)', async () => {
-    const modify = vi.fn();
-    const read = vi.fn(async () => 'a\n[ ] foo\nc');
-    const plugin = { app: { vault: { read, modify } } };
+describe('handleCheckboxChange (process only)', () => {
+  it('updates the correct line and sets checkbox state (checked)', async () => {
+    let content = 'a\n[ ] foo\nc';
+    const process = vi.fn(async (_file, fn: (data: string) => string) => { content = fn(content); });
+    const plugin = { app: { vault: { process } } };
     const file = {};
-    const box = { checked: true };
+    const box = { checked: true } as any;
     await handleCheckboxChange({ box, plugin, file, lineNum: 1, idx: 0 });
-    expect(modify).toHaveBeenCalledWith(file, 'a\n[x] foo\nc');
+    expect(process).toHaveBeenCalled();
+    expect(content).toBe('a\n[x] foo\nc');
     expect(box.checked).toBe(true);
   });
 
-  it('modifies the correct line and sets checkbox state (unchecked)', async () => {
-    const modify = vi.fn();
-    const read = vi.fn(async () => 'a\n[x] foo\nc');
-    const plugin = { app: { vault: { read, modify } } };
+  it('updates the correct line and sets checkbox state (unchecked)', async () => {
+    let content = 'a\n[x] foo\nc';
+    const process = vi.fn(async (_file, fn: (data: string) => string) => { content = fn(content); });
+    const plugin = { app: { vault: { process } } };
     const file = {};
-    const box = { checked: false };
+    const box = { checked: false } as any;
     await handleCheckboxChange({ box, plugin, file, lineNum: 1, idx: 0 });
-    expect(modify).toHaveBeenCalledWith(file, 'a\n[ ] foo\nc');
+    expect(process).toHaveBeenCalled();
+    expect(content).toBe('a\n[ ] foo\nc');
     expect(box.checked).toBe(false);
   });
 
   it('does nothing if lineNum is out of bounds', async () => {
-    const modify = vi.fn();
-    const read = vi.fn(async () => 'a\nb\nc');
-    const plugin = { app: { vault: { read, modify } } };
+    let content = 'a\nb\nc';
+    const original = content;
+    const process = vi.fn(async (_file, fn: (data: string) => string) => { content = fn(content); });
+    const plugin = { app: { vault: { process } } };
     const file = {};
-    const box = { checked: true };
+    const box = { checked: true } as any;
     await handleCheckboxChange({ box, plugin, file, lineNum: 5, idx: 0 });
-    expect(modify).not.toHaveBeenCalled();
+    expect(process).toHaveBeenCalled();
+    expect(content).toBe(original);
   });
 
   it('does nothing if checkbox index is not found', async () => {
-    const modify = vi.fn();
-    const read = vi.fn(async () => 'a\nfoo\nc');
-    const plugin = { app: { vault: { read, modify } } };
+    let content = 'a\nfoo\nc';
+    const original = content;
+    const process = vi.fn(async (_file, fn: (data: string) => string) => { content = fn(content); });
+    const plugin = { app: { vault: { process } } };
     const file = {};
-    const box = { checked: true };
+    const box = { checked: true } as any;
     await handleCheckboxChange({ box, plugin, file, lineNum: 1, idx: 0 });
-    expect(modify).not.toHaveBeenCalled();
+    expect(process).toHaveBeenCalled();
+    expect(content).toBe(original);
   });
 });
