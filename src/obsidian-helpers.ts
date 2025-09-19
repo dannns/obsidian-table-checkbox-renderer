@@ -18,7 +18,7 @@ export function getActiveFile(plugin: { app: { workspace: { getActiveViewOfType:
  * @param idx - The line index
  * @returns The line at the given index, or null if out of bounds or error
  */
-export async function getSourceLine(plugin: { app: { vault: { read: (file: TFile) => Promise<string> } } }, file: TFile, idx: number): Promise<string | null> {
+export async function getSourceLine(plugin: { app: { vault: { read: (file: TFile) => Promise<string>, process?: (file: TFile, fn: (data: string) => string | Promise<string>) => Promise<void> } } }, file: TFile, idx: number): Promise<string | null> {
 	try {
 		const content = await plugin.app.vault.read(file);
 		const lines = content.split(/\r?\n/);
