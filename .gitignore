@@ -2,9 +2,11 @@
 node_modules/
 dist/
 build/
+types/
 *.tsbuildinfo
 coverage/
 main.js
+main.js.map
 
 # Obsidian plugin output
 *.zip

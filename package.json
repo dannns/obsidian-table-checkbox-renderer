@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "Renders interactive checkboxes in Markdown tables while in Reading View updating the Markdown when their state is toggled.",
   "main": "main.js",
-  "types": "main.d.ts",
+  "types": "types/index.d.ts",
   "scripts": {
-    "build": "esbuild src/main.ts --bundle --platform=node --external:obsidian --outfile=main.js",
+    "build": "esbuild src/main.ts --bundle --platform=node --external:obsidian --outfile=main.js --sourcemap",
+    "types": "tsc --emitDeclarationOnly --declaration --declarationDir types",
+    "build:all": "npm run build && npm run types",
     "dev": "tsc --watch",
     "test": "vitest run"
   },
