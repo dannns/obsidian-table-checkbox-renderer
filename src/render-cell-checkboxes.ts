@@ -1,6 +1,10 @@
 import type { Plugin } from 'obsidian';
 
-import { createCheckboxElement, createSpanElement, handleCheckboxChange } from './dom-helpers';
+import { handleCheckboxChange } from './dom-helpers';
+
+// Node type constants (for environments where Node is not globally defined)
+const TEXT_NODE = 3;
+const ELEMENT_NODE = 1;
 
 export interface RenderCellCheckboxesOptions {
   cell: HTMLElement;
@@ -15,6 +19,7 @@ export interface RenderCellCheckboxesOptions {
 
 /**
  * Renders checkboxes and spans into a table cell based on its text content.
+ * Preserves existing element nodes (links, etc.) and only processes text nodes.
  * @param options - Rendering options and context
  * @param options.cell - The table cell element
  * @param options.cellIdx - The cell index in the row
@@ -36,21 +41,70 @@ export function renderCellCheckboxes({
   plugin,
   idx
 }: RenderCellCheckboxesOptions): number {
-  const text = cell.textContent || '';
-  const actions = renderCellCheckboxesPure(text);
-  while (cell.firstChild) cell.removeChild(cell.firstChild);
   let localIdx = 0;
-  actions.forEach(action => {
-    if (action.type === 'span') {
-      createSpanElement(cell, action.text!);
-    } else if (action.type === 'checkbox') {
-      const globalIdx = idx + localIdx;
-      const box = createCheckboxElement(cell, action.checked!, () => {
-        handleCheckboxChange({ box, plugin, file, lineNum, idx: globalIdx });
-      });
-      localIdx++;
+
+  /**
+   * Process a single text node, replacing checkbox patterns with actual checkboxes.
+   * Returns an array of nodes (text nodes and checkbox elements) to replace the original.
+   */
+  const processTextNode = (textNode: Text): Node[] => {
+    const text = textNode.textContent || '';
+    const actions = renderCellCheckboxesPure(text);
+
+    // If no checkboxes found, keep the original text node
+    if (actions.length === 1 && actions[0].type === 'span') {
+      return [textNode];
     }
-  });
+
+    const fragment: Node[] = [];
+    actions.forEach(action => {
+      if (action.type === 'span') {
+        fragment.push(document.createTextNode(action.text!));
+      } else if (action.type === 'checkbox') {
+        const globalIdx = idx + localIdx;
+        const box = document.createElement('input');
+        box.type = 'checkbox';
+        box.className = 'task-list-item-checkbox';
+        box.checked = action.checked!;
+        box.addEventListener('change', () => {
+          handleCheckboxChange({ box, plugin, file, lineNum, idx: globalIdx });
+        });
+        fragment.push(box);
+        localIdx++;
+      }
+    });
+    return fragment;
+  };
+
+  /**
+   * Recursively process all child nodes, preserving element nodes
+   * and only transforming text nodes that contain checkbox patterns.
+   */
+  const processNode = (node: Node): void => {
+    const childNodes = Array.from(node.childNodes);
+    for (const child of childNodes) {
+      if (child.nodeType === TEXT_NODE) {
+        const replacements = processTextNode(child as Text);
+        if (replacements.length === 1 && replacements[0] === child) {
+          // No change needed
+          continue;
+        }
+        // Replace the text node with the new nodes
+        const parent = child.parentNode;
+        if (parent) {
+          replacements.forEach(newNode => {
+            parent.insertBefore(newNode, child);
+          });
+          parent.removeChild(child);
+        }
+      } else if (child.nodeType === ELEMENT_NODE) {
+        // Recursively process element nodes (but preserve the element itself)
+        processNode(child);
+      }
+    }
+  };
+
+  processNode(cell);
   return idx + localIdx;
 }
 
