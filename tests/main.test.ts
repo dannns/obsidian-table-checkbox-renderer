@@ -63,17 +63,27 @@ describe('getCheckboxCountsPerCell', () => {
 });
 
 describe('getSourceLineNumber', () => {
-  it('returns correct line number for valid sectionInfo and rowIdx', () => {
-    expect(getSourceLineNumber({ lineStart: 5 }, 2)).toBe(8);
-    expect(getSourceLineNumber({ lineStart: 0 }, 0)).toBe(1);
+  it('returns correct line number for valid sectionInfo and dataRowIdx', () => {
+    expect(getSourceLineNumber({ lineStart: 5 }, 2)).toBe(9);
+    expect(getSourceLineNumber({ lineStart: 0 }, 0)).toBe(2);
   });
 
   it('returns null if sectionInfo is null', () => {
     expect(getSourceLineNumber(null, 3)).toBeNull();
   });
 
-  it('handles negative rowIdx', () => {
-    expect(getSourceLineNumber({ lineStart: 5 }, -1)).toBe(5);
+  it('handles negative dataRowIdx', () => {
+    expect(getSourceLineNumber({ lineStart: 5 }, -1)).toBe(6);
+  });
+
+  it('is immune to extra non-td rows (Sheets Extended scenario)', () => {
+    // The caller (main.ts) passes dataRowIdx=0 for the first data row regardless of
+    // how many extra non-td <tr> rows Sheets Extended prepends to the HTML table.
+    // Without this fix, rowIdx=3 (2 extra SE rows + 1 header) would give lineStart+3+1=lineStart+4 (wrong).
+    // With dataRowIdx=0 the formula gives lineStart+0+2=lineStart+2 (correct).
+    expect(getSourceLineNumber({ lineStart: 0 }, 0)).toBe(2);   // first data row
+    expect(getSourceLineNumber({ lineStart: 0 }, 1)).toBe(3);   // second data row
+    expect(getSourceLineNumber({ lineStart: 0 }, 19)).toBe(21); // 20th data row
   });
 });
 
@@ -193,20 +203,20 @@ describe('TableCheckboxRendererPlugin', () => {
       table.appendChild(tr);
       const el = document.createElement('div');
       el.appendChild(table);
-      // Mock context
+      // Mock context - sourcePath identifies the rendered file directly
       const ctx = {
         getSectionInfo: () => ({ lineStart: 0 }),
+        sourcePath: 'mock.md',
       };
       // Directly assign mock app property
+      // vault.getAbstractFileByPath is used instead of getActiveFile for reliable file resolution
       plugin.app = {
-        workspace: { getActiveViewOfType: () => ({ file: { path: 'mock.md' } }), getActiveFile: () => ({ path: 'mock.md' }) },
-        vault: { read: async () => '[ ] foo', modify: vi.fn() },
+        vault: {
+          read: async () => 'line0\nline1\n[ ] foo',
+          modify: vi.fn(),
+          getAbstractFileByPath: () => ({ path: 'mock.md' }),
+        },
       };
-      // Patch getActiveFile and getSourceLine
-      vi.mock('../src/obsidian-helpers', () => ({
-        getActiveFile: () => ({ path: 'mock.md' }),
-        getSourceLine: async () => '[ ] foo',
-      }));
       // Call the processor
       return cb(el, ctx);
     });
