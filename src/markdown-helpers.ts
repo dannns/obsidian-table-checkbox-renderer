@@ -11,14 +11,14 @@ export function getCheckboxCountsPerCell(line: string): number[] {
 }
 
 /**
- * Returns the source line number for a table row, given section info and row index.
+ * Returns the source line number for a table row, given section info and data row index.
  * @param section - The section info object with lineStart
- * @param row - The row index
+ * @param row - The data row index (counting only rows with `<td>` elements, zero-based)
  * @returns The source line number or null if section is null
  */
 export function getSourceLineNumber(section: { lineStart: number } | null, row: number): number | null {
   if (!section) return null;
-  return section.lineStart + row + 1;
+  return section.lineStart + row + 2;
 }
 
 /**
