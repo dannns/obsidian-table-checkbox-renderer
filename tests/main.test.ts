@@ -94,6 +94,69 @@ describe('renderCellCheckboxes', () => {
     expect(cell.querySelectorAll('span, input[type="checkbox"]').length).toBeGreaterThan(0);
   });
 
+  it('preserves link elements while rendering checkboxes', () => {
+    const cell = document.createElement('td');
+    // Create a link element
+    const link = document.createElement('a');
+    link.href = 'https://example.com';
+    link.textContent = 'Example Link';
+    cell.appendChild(link);
+    // Add text with checkbox after the link
+    cell.appendChild(document.createTextNode(' [ ] '));
+
+    renderCellCheckboxes({
+      cell,
+      cellIdx: 0,
+      counts: [1],
+      srcLine: '[Example Link](https://example.com) [ ]',
+      lineNum: 0,
+      file: {},
+      plugin: {} as any,
+      idx: 0
+    });
+
+    // Link should still exist
+    const preservedLink = cell.querySelector('a');
+    expect(preservedLink).toBeTruthy();
+    expect(preservedLink?.href).toBe('https://example.com/');
+    expect(preservedLink?.textContent).toBe('Example Link');
+
+    // Checkbox should be rendered
+    const checkbox = cell.querySelector('input[type="checkbox"]');
+    expect(checkbox).toBeTruthy();
+  });
+
+  it('preserves links with checkboxes in mixed content', () => {
+    const cell = document.createElement('td');
+    // Build: "[ ] " + <a>Link</a> + " [x]"
+    cell.appendChild(document.createTextNode('[ ] '));
+    const link = document.createElement('a');
+    link.href = 'https://github.com';
+    link.textContent = 'GitHub';
+    cell.appendChild(link);
+    cell.appendChild(document.createTextNode(' [x]'));
+
+    renderCellCheckboxes({
+      cell,
+      cellIdx: 0,
+      counts: [2],
+      srcLine: '[ ] [GitHub](https://github.com) [x]',
+      lineNum: 0,
+      file: {},
+      plugin: {} as any,
+      idx: 0
+    });
+
+    // Link should be preserved
+    const preservedLink = cell.querySelector('a');
+    expect(preservedLink).toBeTruthy();
+    expect(preservedLink?.textContent).toBe('GitHub');
+
+    // Both checkboxes should be rendered
+    const checkboxes = cell.querySelectorAll('input[type="checkbox"]');
+    expect(checkboxes.length).toBe(2);
+  });
+
   it('calls handleCheckboxChange when checkbox is clicked', () => {
     const cell = document.createElement('td');
     cell.textContent = '[ ] foo';
